@@ -6,7 +6,7 @@ public class Merchant{
 
 	public Item[] GetMerchantItems(int level)
     {
-        Item[] items = new Item[3];
+        Item[] items = new Item[Random.Range(1,3)];
         for(int i = 0; i < items.Length; i++)
         {
             items[i] = new Item(level);

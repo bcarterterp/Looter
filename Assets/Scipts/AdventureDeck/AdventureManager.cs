@@ -5,15 +5,16 @@ using UnityEngine.UI;
 
 public class AdventureManager : MonoBehaviour
 {
-	private const float CARD_WIDTH = 245f;
-    private const float CARD_SPACE = 50f;
+	private const float CARD_WIDTH = 160f;
+	private const float CARD_HEIGHT = 100f;
+    private const float CARD_SPACE = 40f;
 
     private AdventureLogic logic;
 
     public Text health, atk, def, storyText;
-	public Image prefab;
-    public Image activeCard;
-    public Image[] activeCards;
+	public Button prefab;
+    public Button activeCard;
+    public Button[] activeCards;
     public Sprite[] cardSprites;
     public Sprite cardBack;
     public Canvas canvas;
@@ -23,8 +24,8 @@ public class AdventureManager : MonoBehaviour
         logic = new AdventureLogic();
         logic.StartGame();
         UpdatePanel();
-		activeCard = (Image)Instantiate(prefab);
-        activeCard.transform.position = new Vector3(0, 162.5f);
+		activeCard = (Button)Instantiate(prefab);
+        activeCard.transform.position = new Vector3(0, 100f);
         activeCard.transform.SetParent(canvas.transform, false);
         ShowCard(-1);
     }
@@ -73,30 +74,13 @@ public class AdventureManager : MonoBehaviour
 				logic.InteractWithActiveCard(0);
 				break;
 		}
-        //switch (logic.GetCardState())
-        //{
-        //    case 0:
-        //        storyText.text = "Like my wares?";
-        //        break;
-        //    case 1:
-        //        if (activeCards == null)
-        //        {
-        //            ShowMerchantItems();
-        //        }
-        //        else
-        //        {
-        //            activeCards = null;
-        //            logic.InteractWithActiveCard(0);
-        //        }
-        //        break;
-        //}
     }
 
     public void ShowMerchantItems()
     {
-		activeCard.enabled = false;
+		activeCard.image.enabled = false;
         Item[] items = logic.GetItems();
-        activeCards = new Image[items.Length];
+        activeCards = new Button[items.Length];
         float startingOffset = 0;
         switch (items.Length)
         {
@@ -112,10 +96,10 @@ public class AdventureManager : MonoBehaviour
         {
             float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
 			Debug.Log (offset);
-			activeCards[i] = (Image)Instantiate(prefab);
-            activeCards[i].transform.position = new Vector3(offset, 162.5f);
+			activeCards[i] = (Button)Instantiate(prefab);
+			activeCards[i].transform.position = new Vector3(offset, CARD_HEIGHT);
             activeCards[i].transform.SetParent(canvas.transform, false);
-            activeCards[i].sprite = cardSprites[(int)CardType.ITEM];
+			activeCards[i].image.sprite = cardSprites[(int)CardType.ITEM];
         }
     }
 
@@ -132,13 +116,14 @@ public class AdventureManager : MonoBehaviour
 
     private void ShowCard(int card)
     {
+		Image cardImage = activeCard.image;
         if (card == -1)
         {
-            activeCard.sprite = cardBack;
+			cardImage.sprite = cardBack;
         }
         else
         {
-            activeCard.sprite = cardSprites[card];
+			cardImage.sprite = cardSprites[card];
         }
         Component[] texts = activeCard.GetComponentsInChildren<Text>();
         foreach (Text text in texts)
@@ -154,6 +139,10 @@ public class AdventureManager : MonoBehaviour
             //}
         }
     }
+
+	public void SetCardImage(Image image, int card){
+
+	}
 
     private string ShowMonsterStats(Text text)
     {
