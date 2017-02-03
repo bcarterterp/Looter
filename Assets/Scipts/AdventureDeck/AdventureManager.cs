@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class AdventureManager : MonoBehaviour
 {
-    private const float CARD_WIDTH = 400f;
-    private const float CARD_SPACE = 20f;
+	private const float CARD_WIDTH = 245f;
+    private const float CARD_SPACE = 50f;
 
     private AdventureLogic logic;
 
     public Text health, atk, def, storyText;
+	public Image prefab;
     public Image activeCard;
     public Image[] activeCards;
     public Sprite[] cardSprites;
@@ -22,8 +23,8 @@ public class AdventureManager : MonoBehaviour
         logic = new AdventureLogic();
         logic.StartGame();
         UpdatePanel();
+		activeCard = (Image)Instantiate(prefab);
         activeCard.transform.position = new Vector3(0, 162.5f);
-        activeCard = (Image)Instantiate(activeCard);
         activeCard.transform.SetParent(canvas.transform, false);
         ShowCard(-1);
     }
@@ -93,26 +94,25 @@ public class AdventureManager : MonoBehaviour
 
     public void ShowMerchantItems()
     {
+		activeCard.enabled = false;
         Item[] items = logic.GetItems();
         activeCards = new Image[items.Length];
         float startingOffset = 0;
         switch (items.Length)
         {
-            case 1:
-                startingOffset = 1.5f * CARD_WIDTH + CARD_SPACE;
-                break;
             case 2:
-                startingOffset = CARD_WIDTH + .5f * CARD_SPACE;
+				startingOffset = .5f * (CARD_WIDTH + CARD_SPACE);
                 break;
-            case 3:
-                startingOffset = .5f * CARD_WIDTH;
+			case 3:
+				startingOffset = CARD_WIDTH + CARD_SPACE;
                 break;
         }
-
+		Debug.Log (items.Length);
         for (int i = 0; i < items.Length; i++)
         {
             float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
-            activeCards[i] = (Image)Instantiate(activeCard);
+			Debug.Log (offset);
+			activeCards[i] = (Image)Instantiate(prefab);
             activeCards[i].transform.position = new Vector3(offset, 162.5f);
             activeCards[i].transform.SetParent(canvas.transform, false);
             activeCards[i].sprite = cardSprites[(int)CardType.ITEM];
