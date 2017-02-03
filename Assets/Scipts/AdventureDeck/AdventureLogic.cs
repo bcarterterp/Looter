@@ -118,6 +118,7 @@ public class AdventureLogic
         if (cardLogic.IsLastStage())
         {
             activeCard = -1;
+			cardLogic.ResetStage();
         }
     }
 
@@ -139,6 +140,7 @@ public class AdventureLogic
         if (cardLogic.IsLastStage())
         {
             activeCard = -1;
+			cardLogic.ResetStage();
         }
     }
 
@@ -162,6 +164,10 @@ public class AdventureLogic
     {
         return activeCard;
     }
+
+	public int GetLogicStage(){
+		return cardLogic.GetStage();
+	}
 
     public Character GetMonster()
     {

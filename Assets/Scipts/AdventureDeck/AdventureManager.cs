@@ -64,6 +64,14 @@ public class AdventureManager : MonoBehaviour
 
     public void MerchantFlow()
     {
+		switch (logic.GetLogicStage ()) {
+			case 1:
+				ShowMerchantItems();
+				break;
+			case 2:
+				logic.InteractWithActiveCard(0);
+				break;
+		}
         //switch (logic.GetCardState())
         //{
         //    case 0:

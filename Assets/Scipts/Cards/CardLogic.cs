@@ -11,6 +11,10 @@ public class CardLogic{
         stage = 0;
     }
 
+	public void ResetStage(){
+		stage = 0;
+	}
+
     public int GetStage()
     {
         return stage;
