@@ -1,35 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdventureManager : MonoBehaviour
+public class AdventureManager : MonoBehaviour, CardSelectedListener
 {
 	private const float CARD_WIDTH = 160f;
 	private const float CARD_HEIGHT = 100f;
     private const float CARD_SPACE = 40f;
 
     private AdventureLogic logic;
+    private SelectableCard activeCard;
+    private SelectableCard[] activeCards;
+    private bool[] optionsSelected;
+    private bool multiSelect;
 
     public Text health, atk, def, storyText;
-	public Button prefab;
-    public Button activeCard;
-    public Button[] activeCards;
-    public Sprite[] cardSprites;
-    public Sprite cardBack;
+	public GameObject prefab;
     public Canvas canvas;
-
-	public bool[] optionsSelected;
 
     private void Start()
     {
         logic = new AdventureLogic();
         logic.StartGame();
         UpdatePanel();
-		activeCard = (Button)Instantiate(prefab);
+		activeCard = Instantiate(prefab).GetComponent<SelectableCard>();
         activeCard.transform.position = new Vector3(0, 100f);
         activeCard.transform.SetParent(canvas.transform, false);
-        //ShowCard(null, 0);
+        activeCard.ShowCard(-1, false);
+        multiSelect = false;
     }
 
     public void Next()
@@ -43,7 +43,7 @@ public class AdventureManager : MonoBehaviour
         if (logic.GetActiveCard() == -1)
         {
             int card = logic.DrawCard();
-            //ShowCard(card);
+            activeCard.ShowCard(card, false);
         }
         else
         {
@@ -54,7 +54,7 @@ public class AdventureManager : MonoBehaviour
                     MerchantFlow();
                     break;
                 case -1:
-                    //ShowCard(-1, null);
+                    activeCard.ShowCard(-1, false);
                     break;
             }
             UpdatePanel();
@@ -79,10 +79,10 @@ public class AdventureManager : MonoBehaviour
     }
 
     public void ShowMerchantItems()
-    { 
-		activeCard.image.enabled = false;
+    {
+        activeCard.HideCard();
         Item[] items = logic.GetItems();
-        activeCards = new Button[items.Length];
+        activeCards = new SelectableCard[items.Length];
 		optionsSelected = new bool[items.Length];
         float startingOffset = 0;
         switch (items.Length)
@@ -97,29 +97,19 @@ public class AdventureManager : MonoBehaviour
 		for (int i = 0; i < items.Length; i++) {
 			optionsSelected [i] = false;
 			float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
-			activeCards [i] = (Button)Instantiate (prefab);
+			activeCards [i] = Instantiate(prefab).GetComponent<SelectableCard>();
 			activeCards [i].transform.position = new Vector3 (offset, CARD_HEIGHT);
 			activeCards [i].transform.SetParent (canvas.transform, false);
-			activeCards [i].image.sprite = cardSprites [(int)CardType.ITEM];
+            activeCards[i].ShowItemCard(items[i], true);
 			int option = i;
-			activeCards [i].onClick.AddListener (() => ChangeOption(option,false));
 		}
     }
 
-	public void ChangeOption(int option, bool single){
-		bool state = !optionsSelected [option];
-		if (single) {
-			for (int i = 0; i < optionsSelected.Length; i++) {
-				optionsSelected [i] = false;
-			}
-		}
-		optionsSelected [option] = state;
-	}
-
 	public void OptionsSelected(){
-		for (int i = 0; i < optionsSelected.Length; i++) {
-			if (optionsSelected [i]) {
+		for (int i = 0; i < activeCards.Length; i++) {
+			if (activeCards[i].IsSelected()) {
 				logic.InteractWithActiveCard (i);
+                break;
 			}
 		}
 	}
@@ -127,85 +117,12 @@ public class AdventureManager : MonoBehaviour
     public void Decline()
     {
         logic.Decline();
-        //ShowCard(-1,0);
+        activeCard.ShowCard(-1, false);
     }
 
     public void ClearGame()
     {
         logic.WipeAllData();
-    }
-
-	private void ShowCard(Button card, int cardType)
-    {
-
-		switch ((CardType)cardType) {
-		case CardType.ITEM:
-			break;
-		case CardType.MONSTER:
-			break;
-		}
-		//Image cardImage = activeCard.image;
-        //if (card == -1)
-        //{
-			//cardImage.sprite = cardBack;
-        //}
-        //else
-        //{
-			//cardImage.sprite = cardSprites[card];
-        //}
-        Component[] texts = activeCard.GetComponentsInChildren<Text>();
-        foreach (Text text in texts)
-        {
-            text.enabled = false;
-			switch ((CardType)cardType) {
-			case CardType.ITEM:
-				text.text = ShowItemStats(text);
-				break;
-			case CardType.MONSTER:
-				text.text = ShowMonsterStats(text);
-				break;
-			}
-        }
-    }
-
-    private string ShowMonsterStats(Text text)
-    {
-        text.enabled = true;
-        string value = "";
-        Character monster = logic.GetMonster();
-        switch (text.name)
-        {
-            case "Health":
-                value = "Health: " + monster.getCurrHealth() + "/" + monster.getHealth();
-                break;
-            case "Atk":
-                value = "Atk: " + monster.getCurrAttack() + "/" + monster.getAttack();
-                break;
-            case "Def":
-                value = "Def: " + monster.getCurrDef() + "/" + monster.getDefence();
-                break;
-        }
-        return value;
-    }
-
-    private string ShowItemStats(Text text)
-    {
-        text.enabled = true;
-		string value = "";
-        Item item = logic.GetItem();
-        switch (text.name)
-        {
-            case "Health":
-                value = "Health: " + item.getHealth();
-                break;
-            case "Atk":
-                value = "Atk: " + item.getAttack();
-                break;
-            case "Def":
-                value = "Def: " + item.getDef();
-                break;
-        }
-        return value;
     }
 
     private void UpdatePanel()
@@ -216,4 +133,14 @@ public class AdventureManager : MonoBehaviour
         def.text = "Def: " + hero.getCurrDef() + "/" + hero.getDefence();
     }
 
+    public void CardSelected()
+    {
+        if (!multiSelect)
+        {
+            foreach(SelectableCard card in activeCards)
+            {
+                card.CardSelected(false);
+            }
+        }
+    }
 }

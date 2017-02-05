@@ -7,8 +7,6 @@ public class AdventureLogic
     private AdventureStack mainDeck;
 
     private Hero hero;
-    private Blacksmith blacksmith;
-    private Merchant merchant;
     private MonsterLogic monsterLogic;
     private PotionLogic potionLogic;
     private ItemLogic itemLogic;
