@@ -19,6 +19,8 @@ public class AdventureManager : MonoBehaviour
     public Sprite cardBack;
     public Canvas canvas;
 
+	public bool[] optionsSelected;
+
     private void Start()
     {
         logic = new AdventureLogic();
@@ -27,7 +29,7 @@ public class AdventureManager : MonoBehaviour
 		activeCard = (Button)Instantiate(prefab);
         activeCard.transform.position = new Vector3(0, 100f);
         activeCard.transform.SetParent(canvas.transform, false);
-        ShowCard(-1);
+        //ShowCard(null, 0);
     }
 
     public void Next()
@@ -41,7 +43,7 @@ public class AdventureManager : MonoBehaviour
         if (logic.GetActiveCard() == -1)
         {
             int card = logic.DrawCard();
-            ShowCard(card);
+            //ShowCard(card);
         }
         else
         {
@@ -52,7 +54,7 @@ public class AdventureManager : MonoBehaviour
                     MerchantFlow();
                     break;
                 case -1:
-                    ShowCard(-1);
+                    //ShowCard(-1, null);
                     break;
             }
             UpdatePanel();
@@ -71,16 +73,17 @@ public class AdventureManager : MonoBehaviour
 				ShowMerchantItems();
 				break;
 			case 2:
-				logic.InteractWithActiveCard(0);
+				OptionsSelected ();
 				break;
 		}
     }
 
     public void ShowMerchantItems()
-    {
+    { 
 		activeCard.image.enabled = false;
         Item[] items = logic.GetItems();
         activeCards = new Button[items.Length];
+		optionsSelected = new bool[items.Length];
         float startingOffset = 0;
         switch (items.Length)
         {
@@ -91,22 +94,40 @@ public class AdventureManager : MonoBehaviour
 				startingOffset = CARD_WIDTH + CARD_SPACE;
                 break;
         }
-		Debug.Log (items.Length);
-        for (int i = 0; i < items.Length; i++)
-        {
-            float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
-			Debug.Log (offset);
-			activeCards[i] = (Button)Instantiate(prefab);
-			activeCards[i].transform.position = new Vector3(offset, CARD_HEIGHT);
-            activeCards[i].transform.SetParent(canvas.transform, false);
-			activeCards[i].image.sprite = cardSprites[(int)CardType.ITEM];
-        }
+		for (int i = 0; i < items.Length; i++) {
+			optionsSelected [i] = false;
+			float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
+			activeCards [i] = (Button)Instantiate (prefab);
+			activeCards [i].transform.position = new Vector3 (offset, CARD_HEIGHT);
+			activeCards [i].transform.SetParent (canvas.transform, false);
+			activeCards [i].image.sprite = cardSprites [(int)CardType.ITEM];
+			int option = i;
+			activeCards [i].onClick.AddListener (() => ChangeOption(option,false));
+		}
     }
+
+	public void ChangeOption(int option, bool single){
+		bool state = !optionsSelected [option];
+		if (single) {
+			for (int i = 0; i < optionsSelected.Length; i++) {
+				optionsSelected [i] = false;
+			}
+		}
+		optionsSelected [option] = state;
+	}
+
+	public void OptionsSelected(){
+		for (int i = 0; i < optionsSelected.Length; i++) {
+			if (optionsSelected [i]) {
+				logic.InteractWithActiveCard (i);
+			}
+		}
+	}
 
     public void Decline()
     {
         logic.Decline();
-        ShowCard(-1);
+        //ShowCard(-1,0);
     }
 
     public void ClearGame()
@@ -114,35 +135,38 @@ public class AdventureManager : MonoBehaviour
         logic.WipeAllData();
     }
 
-    private void ShowCard(int card)
+	private void ShowCard(Button card, int cardType)
     {
-		Image cardImage = activeCard.image;
-        if (card == -1)
-        {
-			cardImage.sprite = cardBack;
-        }
-        else
-        {
-			cardImage.sprite = cardSprites[card];
-        }
+
+		switch ((CardType)cardType) {
+		case CardType.ITEM:
+			break;
+		case CardType.MONSTER:
+			break;
+		}
+		//Image cardImage = activeCard.image;
+        //if (card == -1)
+        //{
+			//cardImage.sprite = cardBack;
+        //}
+        //else
+        //{
+			//cardImage.sprite = cardSprites[card];
+        //}
         Component[] texts = activeCard.GetComponentsInChildren<Text>();
         foreach (Text text in texts)
         {
             text.enabled = false;
-            if ((CardType)card == CardType.MONSTER)
-            {
-                text.text = ShowMonsterStats(text);
-            }
-            //else if ((CardType)card == CardType.ITEM)
-            //{
-            //    text.text = ShowItemStats(text);
-            //}
+			switch ((CardType)cardType) {
+			case CardType.ITEM:
+				text.text = ShowItemStats(text);
+				break;
+			case CardType.MONSTER:
+				text.text = ShowMonsterStats(text);
+				break;
+			}
         }
     }
-
-	public void SetCardImage(Image image, int card){
-
-	}
 
     private string ShowMonsterStats(Text text)
     {
@@ -167,20 +191,20 @@ public class AdventureManager : MonoBehaviour
     private string ShowItemStats(Text text)
     {
         text.enabled = true;
-        string value = "";
-        //Item item = logic.GetItem();
-        //switch (text.name)
-        //{
-        //    case "Health":
-        //        value = "Health: " + item.getHealth();
-        //        break;
-        //    case "Atk":
-        //        value = "Atk: " + item.getAttack();
-        //        break;
-        //    case "Def":
-        //        value = "Def: " + item.getDef();
-        //        break;
-        //}
+		string value = "";
+        Item item = logic.GetItem();
+        switch (text.name)
+        {
+            case "Health":
+                value = "Health: " + item.getHealth();
+                break;
+            case "Atk":
+                value = "Atk: " + item.getAttack();
+                break;
+            case "Def":
+                value = "Def: " + item.getDef();
+                break;
+        }
         return value;
     }
 

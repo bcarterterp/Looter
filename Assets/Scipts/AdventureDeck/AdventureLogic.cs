@@ -174,6 +174,10 @@ public class AdventureLogic
         return monsterLogic.GetMonster();
     }
 
+	public Item GetItem(){
+		return null;
+	}
+
     public Item[] GetItems()
     {
         switch ((CardType)activeCard)
