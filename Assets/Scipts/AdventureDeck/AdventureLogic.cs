@@ -189,4 +189,8 @@ public class AdventureLogic
         }
     }
 
+    public bool AdventureComplete()
+    {
+        return mainDeck.CardCount() == 0;
+    }
 }

@@ -11,10 +11,12 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
     private const float CARD_SPACE = 40f;
 
     private AdventureLogic logic;
+    private AdventureStoryGenerator storyGenerator;
     private SelectableCard activeCard;
     private GameObject[] activeCards;
     private bool[] optionsSelected;
     private bool multiSelect;
+    private int stage;
 
     public Text health, atk, def, storyText;
 	public GameObject prefab;
@@ -23,6 +25,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
     private void Start()
     {
         logic = new AdventureLogic();
+        storyGenerator = new AdventureStoryGenerator();
         logic.StartGame();
         UpdatePanel();
 		activeCard = Instantiate(prefab).GetComponent<SelectableCard>();
@@ -30,58 +33,107 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         activeCard.transform.SetParent(canvas.transform, false);
         activeCard.ShowCard(-1, false);
         multiSelect = false;
+        stage = 0;
     }
 
-    public void Next()
+    public void ProgressAdventure()
     {
-
-        if (logic.GetActiveCard() == (int)CardType.POI)
+        switch (stage)
         {
-            logic.Restart();
+            case (int)AdventureStage.TRANSITION:
+                TransitionStage();
+                break;
+            case (int)AdventureStage.DISCOVERY:
+                DiscoveryStage();
+                break;
+            case (int)AdventureStage.INTERACTION:
+                InteractionStage();
+                break;
+            case (int)AdventureStage.COMPLETION:
+                CompletionStage();
+                break;
+            case (int)AdventureStage.ARRIVAL:
+                ArrivalStage();
+                break;
         }
+    }
 
-        if (logic.GetActiveCard() == -1)
+    private void AvoidCard()
+    {
+        stage = 0;
+        storyText.text = storyGenerator.GetAvoidText(logic.GetActiveCard());
+    }
+
+    private void TransitionStage()
+    {
+        storyText.text = storyGenerator.GetAdventureTransitionText();
+        stage++;
+    }
+
+    private void DiscoveryStage()
+    {
+        int card = logic.DrawCard();
+        if (card == 0)
         {
-            int card = logic.DrawCard();
-            if (card == 0)
-            {
-                activeCard.ShowMonsterCard(logic.GetMonster(), false);
-            }
-            else
-            {
-                activeCard.ShowCard(card, false);
-            }
+            activeCard.ShowMonsterCard(logic.GetMonster(), false);
         }
         else
         {
-            logic.InteractWithActiveCard();
-            switch (logic.GetActiveCard())
-            {
-                case (int)CardType.MONSTER:
-                    MonsterFlow();
-                    break;
-                case (int)CardType.POTION:
-                    PotionFlow();
-                    break;
-                case (int)CardType.ITEM:
-                    break;
-                case (int)CardType.MERCHANT:
-                    MerchantFlow();
-                    break;
-                case -1:
-                    activeCard.ShowCard(-1, false);
-                    break;
-            }
-            UpdatePanel();
+            activeCard.ShowCard(card, false);
         }
+        storyText.text = storyGenerator.GetCardDiscoveryText(card);
+        stage++;
+    }
 
+    private void InteractionStage()
+    {
+        logic.InteractWithActiveCard();
+        switch (logic.GetActiveCard())
+        {
+            case (int)CardType.MONSTER:
+                MonsterFlow();
+                break;
+            case (int)CardType.POTION:
+                PotionFlow();
+                break;
+            case (int)CardType.ITEM:
+                break;
+            case (int)CardType.MERCHANT:
+                MerchantFlow();
+                break;
+            case -1:
+                activeCard.ShowCard(-1, false);
+                stage++;
+                break;
+        }
+        UpdatePanel();
         if (logic.GetHero().getCurrHealth() == 0)
         {
             logic.WipeAllData();
         }
     }
 
-    public void MonsterFlow()
+    private void CompletionStage()
+    {
+        storyText.text = storyGenerator.GetCompletionText((logic.GetActiveCard()));
+        if (logic.AdventureComplete())
+        {
+            stage++;
+        }
+        else
+        {
+            stage = 0;
+        }
+    }
+
+    private void ArrivalStage()
+    {
+        storyText.text = storyGenerator.GetArrivalText();
+        logic.Restart();
+        stage = 0;
+    }
+
+    private void MonsterFlow()
     {
         if(logic.GetLogicStage() == 0)
         {
@@ -89,17 +141,17 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         }
     }
 
-    public void PotionFlow()
+    private void PotionFlow()
     {
 
     }
 
-    public void ItemFlow()
+    private void ItemFlow()
     {
 
     }
 
-    public void MerchantFlow()
+    private void MerchantFlow()
     {
 		if (activeCards == null) {
 			ShowMerchantItems ();
@@ -108,7 +160,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 		}
     }
 
-    public void ShowMerchantItems()
+    private void ShowMerchantItems()
     {
         activeCard.HideCard();
         Item[] items = logic.GetItems();
@@ -135,7 +187,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 		}
     }
 
-	public void OptionsSelected(){
+    private void OptionsSelected(){
 		for (int i = 0; i < activeCards.Length; i++) {
             SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
             if (card.IsSelected()) {
@@ -150,13 +202,13 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 		activeCard.ShowCard (-1, false);
 	}
 
-    public void Decline()
+    private void Decline()
     {
         logic.Decline();
         activeCard.ShowCard(-1, false);
     }
 
-    public void ClearGame()
+    private void ClearGame()
     {
         logic.WipeAllData();
     }
