@@ -68,13 +68,10 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     public void MerchantFlow()
     {
-		switch (logic.GetLogicStage ()) {
-			case 1:
-				ShowMerchantItems();
-				break;
-			case 2:
-				OptionsSelected ();
-				break;
+		if (activeCards == null) {
+			ShowMerchantItems ();
+		} else {
+			OptionsSelected();
 		}
     }
 
@@ -97,11 +94,10 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 		for (int i = 0; i < items.Length; i++) {
 			optionsSelected [i] = false;
 			float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
-			activeCards [i] = Instantiate(prefab).GetComponent<SelectableCard>();
-			activeCards [i].transform.position = new Vector3 (offset, CARD_HEIGHT);
-			activeCards [i].transform.SetParent (canvas.transform, false);
+			activeCards[i] = Instantiate(prefab).GetComponent<SelectableCard>();
+			activeCards[i].transform.position = new Vector3 (offset, CARD_HEIGHT);
+			activeCards[i].transform.SetParent (canvas.transform, false);
             activeCards[i].ShowItemCard(items[i], true);
-			int option = i;
 		}
     }
 
@@ -112,6 +108,11 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
                 break;
 			}
 		}
+		for (int i = 0; i < activeCards.Length; i++) {
+			Destroy (activeCards [i]);
+		}
+		activeCards = null;
+		activeCard.ShowCard (-1, false);
 	}
 
     public void Decline()
