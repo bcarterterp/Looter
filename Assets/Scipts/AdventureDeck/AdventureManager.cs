@@ -12,7 +12,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private AdventureLogic logic;
     private SelectableCard activeCard;
-    private SelectableCard[] activeCards;
+    private GameObject[] activeCards;
     private bool[] optionsSelected;
     private bool multiSelect;
 
@@ -43,13 +43,28 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         if (logic.GetActiveCard() == -1)
         {
             int card = logic.DrawCard();
-            activeCard.ShowCard(card, false);
+            if (card == 0)
+            {
+                activeCard.ShowMonsterCard(logic.GetMonster(), false);
+            }
+            else
+            {
+                activeCard.ShowCard(card, false);
+            }
         }
         else
         {
             logic.InteractWithActiveCard();
             switch (logic.GetActiveCard())
             {
+                case (int)CardType.MONSTER:
+                    MonsterFlow();
+                    break;
+                case (int)CardType.POTION:
+                    PotionFlow();
+                    break;
+                case (int)CardType.ITEM:
+                    break;
                 case (int)CardType.MERCHANT:
                     MerchantFlow();
                     break;
@@ -66,6 +81,24 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         }
     }
 
+    public void MonsterFlow()
+    {
+        if(logic.GetLogicStage() == 0)
+        {
+            activeCard.ShowMonsterCard(logic.GetMonster(), false);
+        }
+    }
+
+    public void PotionFlow()
+    {
+
+    }
+
+    public void ItemFlow()
+    {
+
+    }
+
     public void MerchantFlow()
     {
 		if (activeCards == null) {
@@ -79,7 +112,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
     {
         activeCard.HideCard();
         Item[] items = logic.GetItems();
-        activeCards = new SelectableCard[items.Length];
+        activeCards = new GameObject[items.Length];
 		optionsSelected = new bool[items.Length];
         float startingOffset = 0;
         switch (items.Length)
@@ -94,16 +127,18 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 		for (int i = 0; i < items.Length; i++) {
 			optionsSelected [i] = false;
 			float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
-			activeCards[i] = Instantiate(prefab).GetComponent<SelectableCard>();
-			activeCards[i].transform.position = new Vector3 (offset, CARD_HEIGHT);
-			activeCards[i].transform.SetParent (canvas.transform, false);
-            activeCards[i].ShowItemCard(items[i], true);
+            activeCards[i] = Instantiate(prefab);
+            SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
+            card.transform.position = new Vector3 (offset, CARD_HEIGHT);
+            card.transform.SetParent (canvas.transform, false);
+            card.ShowItemCard(items[i], true);
 		}
     }
 
 	public void OptionsSelected(){
 		for (int i = 0; i < activeCards.Length; i++) {
-			if (activeCards[i].IsSelected()) {
+            SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
+            if (card.IsSelected()) {
 				logic.InteractWithActiveCard (i);
                 break;
 			}
@@ -138,8 +173,9 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
     {
         if (!multiSelect)
         {
-            foreach(SelectableCard card in activeCards)
+            foreach(GameObject cardObject in activeCards)
             {
+                SelectableCard card = cardObject.GetComponent<SelectableCard>();
                 card.CardSelected(false);
             }
         }

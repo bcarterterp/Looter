@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,7 +52,7 @@ public class AdventureStack{
     {
         cards = new List<int>();
         Push((int)CardType.POI);
-        Push((int)CardType.MERCHANT);
+        Push((int)CardType.POTION);
         return;
         int deckSize = Random.Range(0, 5)+5;
         for (int i = 0; i < deckSize; i++)

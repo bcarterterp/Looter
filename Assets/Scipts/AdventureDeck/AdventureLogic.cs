@@ -67,6 +67,7 @@ public class AdventureLogic
                 cardLogic = opalLogic;
                 break;
             case CardType.MERCHANT:
+                merchantLogic.GenerateItems(hero.getLevel());
                 cardLogic = merchantLogic;
                 break;
             case CardType.BLACKSMITH:
@@ -104,9 +105,6 @@ public class AdventureLogic
                     itemLogic.FightMonster(hero);
                 }
                 break;
-			case CardType.MERCHANT:
-				merchantLogic.GenerateItems(hero.getLevel());
-				break;
             case CardType.THEIF:
                 thiefLogic.StealItem(hero);
                 break;

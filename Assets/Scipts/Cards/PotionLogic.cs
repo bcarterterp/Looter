@@ -8,6 +8,7 @@ public class PotionLogic : CardLogic {
 
 	public void DrinkPotion(Hero hero)
     {
+        potion = new Potion();
         potion.drinkPotion(hero);
     }
 

@@ -43,6 +43,7 @@ public class SelectableCard : MonoBehaviour {
     public void ShowCard(int cardType, bool enabled)
     {
         button.enabled = enabled;
+        button.image.enabled = true;
         top.enabled = false;
         middle.enabled = false;
         bottom.enabled = false;
