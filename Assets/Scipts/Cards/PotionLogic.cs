@@ -30,7 +30,6 @@ public class PotionLogic : CardLogic {
 	public void DiscoverPotion(){
 		potion.DiscoverPotion();
 		effectNumber = Random.Range(0,Potion.TOTAL_OPTIONS);
-		Debug.Log (effectNumber);
 	}
 
 	public void DrinkPotion(Hero hero)

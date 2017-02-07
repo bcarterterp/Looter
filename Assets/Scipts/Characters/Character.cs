@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,26 +26,28 @@ public class Character{
         evasionChance = 5;
     }
 
-    public virtual void fightCharacter(Hero character)
+    public virtual int fightCharacter(Hero character)
     {
         int damage = getCurrAttack() - character.getCurrDef();
-        if (damage > 0 && Random.Range(1,100) > character.GetEvasionChance())
+        if (damage > 0)
         {
-            character.setCurrHealth(character.getCurrHealth() - damage);
+            character.TakeDamage(damage);
         }
+        return damage;
     }
 
 	public bool CharacterWillMiss(Character character){
-		return Random.Range (1, 100) > character.GetEvasionChance ();
+		return Random.Range (1, 100) <= character.GetEvasionChance ();
 	}
 
-    public void fightCharacter(Character character)
+    public int fightCharacter(Character character)
     {
         int damage = getCurrAttack() - character.getCurrDef();
-        if (damage > 0 && Random.Range(1, 100) > character.GetEvasionChance())
+        if (damage > 0)
         {
-            character.setCurrHealth(character.getCurrHealth() - damage);
+            character.TakeDamage(damage);
         }
+        return damage;
     }
 
     public int getExpThreshhold()
@@ -71,6 +73,18 @@ public class Character{
     public void setCurrHealth(int currHealth)
     {
         this.currHealth = currHealth;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if(damage > currHealth)
+        {
+            currHealth = 0;
+        }
+        else
+        {
+            currHealth -= damage;
+        }
     }
 
     public void gainHealth(int amount)

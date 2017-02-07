@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,10 +17,10 @@ public class NecroMage : Character {
         skeletonSummonPhase = 0;
     }
 
-    public override void fightCharacter(Hero character)
+    public override int fightCharacter(Hero character)
     {
-        base.fightCharacter(character);
         skeletonSummonPhase++;
+        return base.fightCharacter(character);
     }
 
     private void initHealth()

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,13 +17,15 @@ public class Cyclops : Character {
         canAttack = true;
     }
 
-    public override void fightCharacter(Hero character)
+    public override int fightCharacter(Hero character)
     {
+        int damage = 0;
         if (canAttack)
         {
-            base.fightCharacter(character);
+            damage = base.fightCharacter(character);
         }
         canAttack = !canAttack;
+        return damage;
     }
 
     private void initHealth()

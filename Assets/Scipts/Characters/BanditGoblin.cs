@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,7 +52,7 @@ public class BanditGoblin : Character {
         setExperience(getLevel() * 2);
     }
 
-    public override void fightCharacter(Hero hero)
+    public override int fightCharacter(Hero hero)
     {
         int ignoredValue = 0;
         Item ignoredItem = hero.GetRandomArmor();
@@ -61,9 +61,10 @@ public class BanditGoblin : Character {
             ignoredValue = ignoredItem.getDef();
         }
         int damage = getCurrAttack() - hero.getCurrDef() + ignoredValue;
-        if (damage > 0 && Random.Range(1,100) > hero.GetEvasionChance())
+        if (damage > 0)
         {
-            hero.setCurrHealth(hero.getCurrHealth() - damage);
+            hero.TakeDamage(damage);
         }
+        return damage;
     }
 }

@@ -64,6 +64,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void TransitionStage()
     {
+        Debug.Log("Transition");
 		activeCard.HideCard ();
         storyText.text = storyGenerator.GetAdventureTransitionText();
         stage++;
@@ -71,6 +72,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void DiscoveryStage()
     {
+        Debug.Log("Discovery");
         int card = logic.DrawCard();
         if (card == 0)
         {
@@ -87,7 +89,8 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void InteractionStage()
     {
-		int cardType = logic.GetActiveCard();
+        Debug.Log("Interaction");
+        int cardType = logic.GetActiveCard();
         logic.InteractWithActiveCard();
 		switch (cardType)
         {
@@ -103,10 +106,11 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
                 MerchantFlow();
                 break;
         }
-		storyText.text = logic.GetCardText ();
+		storyText.text = logic.GetCardText();
         UpdatePanel();
 		if (logic.IsLastStage ()) {
-			if (logic.AdventureComplete())
+            Debug.Log("Last Stage");
+            if (logic.AdventureComplete())
 			{
 				stage++;
 			}
@@ -123,7 +127,8 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void ArrivalStage()
     {
-		activeCard.HideCard ();
+        Debug.Log("Arrival");
+        activeCard.HideCard ();
         storyText.text = storyGenerator.GetArrivalText();
         logic.Restart();
         stage = 0;
@@ -131,8 +136,10 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void MonsterFlow()
     {
-        if(logic.GetLogicStage() == 0)
+        Debug.Log("Stage"+ logic.GetLogicStage());
+        if (logic.GetLogicStage() == 1)
         {
+            Debug.Log("Update");
             activeCard.ShowMonsterCard(logic.GetMonster(), false);
         }
     }
