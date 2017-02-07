@@ -56,7 +56,8 @@ public class AdventureLogic
                 cardLogic = monsterLogic;
                 monsterLogic.EncounterRandomMonster(hero.getLevel());
                 break;
-            case CardType.POTION:
+			case CardType.POTION:
+				potionLogic.DiscoverPotion ();
                 cardLogic = potionLogic;
                 break;
             case CardType.ITEM:
@@ -81,6 +82,7 @@ public class AdventureLogic
                 cardLogic = wellLogic;
                 break;
         }
+		cardLogic.ResetStage();
         persister.SaveHero(hero);
         return activeCard;
     }
@@ -113,11 +115,6 @@ public class AdventureLogic
                 break;
         }
         persister.SaveHero(hero);
-        if (cardLogic.IsLastStage())
-        {
-            activeCard = -1;
-			cardLogic.ResetStage();
-        }
     }
 
     public void InteractWithActiveCard(int choice)
@@ -135,11 +132,6 @@ public class AdventureLogic
                 break;
         }
         persister.SaveHero(hero);
-        if (cardLogic.IsLastStage())
-        {
-            activeCard = -1;
-			cardLogic.ResetStage();
-        }
     }
 
     public void Decline()
@@ -167,6 +159,10 @@ public class AdventureLogic
 		return cardLogic.GetStage();
 	}
 
+	public bool IsLastStage(){
+		return cardLogic.IsLastStage();
+	}
+
     public Character GetMonster()
     {
         return monsterLogic.GetMonster();
@@ -188,6 +184,10 @@ public class AdventureLogic
                 return new Item[0];
         }
     }
+
+	public string GetCardText(){
+		return cardLogic.GetStoryText();
+	}
 
     public bool AdventureComplete()
     {

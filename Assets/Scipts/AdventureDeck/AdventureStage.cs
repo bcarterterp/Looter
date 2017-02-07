@@ -7,6 +7,5 @@ public enum AdventureStage{
     TRANSITION,
     DISCOVERY,
     INTERACTION,
-    COMPLETION,
     ARRIVAL
 }

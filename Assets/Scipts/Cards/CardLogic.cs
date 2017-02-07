@@ -27,6 +27,10 @@ public class CardLogic{
 
     public virtual bool IsLastStage()
     {
-        return GetStage() == 0;
+        return GetStage() == 1;
     }
+
+	public virtual string GetStoryText(){
+		return "";
+	}
 }

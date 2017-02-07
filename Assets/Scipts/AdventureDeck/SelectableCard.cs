@@ -59,6 +59,9 @@ public class SelectableCard : MonoBehaviour {
 
     public void HideCard()
     {
+		top.enabled = false;
+		middle.enabled = false;
+		bottom.enabled = false;
         button.enabled = false;
         button.image.enabled = false;
     }

@@ -5,12 +5,17 @@ using UnityEngine;
 class Potion
 {
 
-    private const int TOTAL_OPTIONS = 8;
+    public const int TOTAL_OPTIONS = 8;
+
+	int potionOption;
+
+	public void DiscoverPotion(){
+		potionOption = Random.Range(0,TOTAL_OPTIONS);
+	}
 
     public void drinkPotion(Hero hero)
     {
-        int value = Random.Range(0,TOTAL_OPTIONS);
-        switch (value)
+		switch (potionOption)
         {
             case 0:
                 hero.gainHealth(hero.getLevel() * 5);
@@ -37,6 +42,9 @@ class Potion
                 hero.refreshHero();
                 break;
         }
-
     }
+
+	public int GetPotionValue(){
+		return potionOption;
+	}
 }

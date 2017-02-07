@@ -35,6 +35,10 @@ public class Character{
         }
     }
 
+	public bool CharacterWillMiss(Character character){
+		return Random.Range (1, 100) > character.GetEvasionChance ();
+	}
+
     public void fightCharacter(Character character)
     {
         int damage = getCurrAttack() - character.getCurrDef();
