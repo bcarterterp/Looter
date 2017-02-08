@@ -95,15 +95,8 @@ public class AdventureLogic
             case CardType.POTION:
                 potionLogic.DrinkPotion(hero);
                 break;
-            case CardType.ITEM:
-                if(itemLogic.GetMonster() == null)
-                { 
-                    hero.AquireEquipment(itemLogic.GetItem());
-                }
-                else
-                {
-                    itemLogic.FightMonster(hero);
-                }
+			case CardType.ITEM:
+				itemLogic.InteractWithItem (hero);
                 break;
             case CardType.THEIF:
                 thiefLogic.StealItem(hero);
@@ -163,11 +156,16 @@ public class AdventureLogic
 
     public Character GetMonster()
     {
-        return monsterLogic.GetMonster();
+		switch (activeCard) {
+		case (int)CardType.ITEM:
+			return itemLogic.GetMonster();
+		default:
+			return monsterLogic.GetMonster();
+		}
     }
 
 	public Item GetItem(){
-		return null;
+		return itemLogic.GetItem();
 	}
 
     public Item[] GetItems()
@@ -191,4 +189,10 @@ public class AdventureLogic
     {
         return mainDeck.CardCount() == 0;
     }
+
+	public void StageCheck(){
+		if (cardLogic != null) {
+			cardLogic.StageCheck ();
+		}
+	}
 }

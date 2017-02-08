@@ -23,7 +23,7 @@ public class MonsterLogic : CardLogic
 
     public void EncounterRandomMonster(int level)
     {
-        monsterType = (MonsterType)Random.Range(0, (int)MonsterType.TOTAL_MONSTER_TYPES - 1);
+        monsterType = (MonsterType)Random.Range(0, (int)MonsterType.TOTAL_MONSTER_TYPES);
         switch (monsterType)
         {
             case MonsterType.HUMAN_THUG:
@@ -48,7 +48,6 @@ public class MonsterLogic : CardLogic
                 monster = new Zombie(level);
                 break;
         }
-        Debug.Log("Gen Monster"+GetStage());
     }
 
     public void FightMonster(Hero hero)
@@ -82,18 +81,15 @@ public class MonsterLogic : CardLogic
             }
         }
 
-        Debug.Log("Fight"+GetStage());
         if (monster.getCurrHealth() <= 0)
         {
             hero.gainExperience(monster.getExperience());
             hero.AdjustGold(monster.getGold());
-            Debug.Log("Win"+GetStage());
         }
     }
 
     public override string GetStoryText()
     {
-        Debug.Log("Text"+GetStage());
         switch (GetStage())
         {
             case 0:
@@ -108,7 +104,7 @@ public class MonsterLogic : CardLogic
 
     }
 
-    public string GetMonsterEncounteredText()
+    private string GetMonsterEncounteredText()
     {
         NextStage();
         switch (monsterType)
@@ -132,13 +128,15 @@ public class MonsterLogic : CardLogic
         }
     }
 
-    public string GetFightRoundRecap()
+    private string GetFightRoundRecap()
     {
-        NextStage();
+		if (monster.getCurrHealth () <= 0) {
+			NextStage ();
+		}
         return roundRecap;
     }
 
-    public string GetMonsterDefeated()
+    private string GetMonsterDefeated()
     {
         switch (monsterType)
         {

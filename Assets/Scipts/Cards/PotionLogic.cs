@@ -80,7 +80,7 @@ public class PotionLogic : CardLogic {
 	private string GetUnknownPotionText(){
 
 		List<PotionType> unknownTypes = GetUnknownPotionTypes();
-		type = unknownTypes[Random.Range(0,unknownTypes.Count()-1)];
+		type = unknownTypes[Random.Range(0,unknownTypes.Count())];
 		switch ((PotionType)type) {
 		case PotionType.WHITE:
 			return "Ghost White Potion";
