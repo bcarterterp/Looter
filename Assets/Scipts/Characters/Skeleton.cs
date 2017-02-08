@@ -33,7 +33,7 @@ public class Skeleton : Character {
         int atk = 2;
         if (getLevel() > 1)
         {
-            atk = getLevel() / 3;
+            atk += getLevel() / 3;
         }
         setAttack(atk);
         setCurrAttack(getAttack());

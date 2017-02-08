@@ -18,7 +18,7 @@ public class SelectableCard : MonoBehaviour {
         listener = cardListener;
     }
 
-	public void ShowMonsterCard(Character monster, bool enabled)
+	public void ShowCard(Character monster, bool enabled)
     {
         ShowCard(0, enabled);
         top.enabled = true;
@@ -29,7 +29,7 @@ public class SelectableCard : MonoBehaviour {
         bottom.text = "Def: " + monster.getCurrDef() + "/" + monster.getDefence();
     }
 
-    public void ShowItemCard(Item item, bool enabled)
+    public void ShowCard(Item item, bool enabled)
     {
         ShowCard(3, enabled);
         top.enabled = true;
@@ -39,6 +39,16 @@ public class SelectableCard : MonoBehaviour {
         bottom.enabled = true;
         bottom.text = "Def: " + item.getDef();
     }
+
+	public void ShowCard(object dataObject, bool enabled){
+		if (dataObject is Item) {
+			ShowCard ((Item)dataObject, enabled);
+		} else if (dataObject is Character) {
+			ShowCard ((Character)dataObject, enabled);
+		} else if (dataObject is int) {
+			ShowCard ((int)dataObject, enabled);
+		}
+	}
 
     public void ShowCard(int cardType, bool enabled)
     {

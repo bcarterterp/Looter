@@ -30,6 +30,7 @@ public class PotionLogic : CardLogic {
 	public void DiscoverPotion(){
 		potion.DiscoverPotion();
 		effectNumber = Random.Range(0,Potion.TOTAL_OPTIONS);
+		ShouldProgress ();
 	}
 
 	public void DrinkPotion(Hero hero)
@@ -38,7 +39,7 @@ public class PotionLogic : CardLogic {
 		if(!discoveredPotions.ContainsKey(effectNumber)){
 			discoveredPotions.Add(effectNumber, type);
 		}
-		NextStage();
+		ShouldProgress ();
     }
 
 	public override string GetStoryText(){

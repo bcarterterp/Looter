@@ -75,7 +75,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         int card = logic.DrawCard();
         if (card == 0)
         {
-            activeCard.ShowMonsterCard(logic.GetMonster(), false);
+            activeCard.ShowCard(logic.GetMonster(), false);
         }
         else
         {
@@ -101,6 +101,9 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 			case (int)CardType.ITEM:
 				ItemFlow();
                 break;
+			case (int)CardType.OPAL:
+				OpalFlow ();
+				break;
             case (int)CardType.MERCHANT:
                 MerchantFlow();
                 break;
@@ -133,7 +136,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void MonsterFlow()
     {
-        activeCard.ShowMonsterCard(logic.GetMonster(), false);
+        activeCard.ShowCard(logic.GetMonster(), false);
     }
 
     private void PotionFlow()
@@ -146,18 +149,34 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 		Debug.Log ("Logic Stage" + logic.GetLogicStage ());
 		if (logic.GetLogicStage () == 1) {
 			if (logic.GetMonster () != null) {
-				activeCard.ShowMonsterCard (logic.GetMonster (), false);
+				activeCard.ShowCard (logic.GetMonster (), false);
 			} else {
-				activeCard.ShowItemCard (logic.GetItem (), false);
+				activeCard.ShowCard (logic.GetItem (), false);
 			}
 		} else if (logic.GetLogicStage () == 2) {
 			if (logic.GetMonster () != null) {
-				activeCard.ShowMonsterCard (logic.GetMonster (), false);
+				activeCard.ShowCard (logic.GetMonster (), false);
 			} else {
-				activeCard.ShowItemCard (logic.GetItem (), false);
+				activeCard.ShowCard (logic.GetItem (), false);
 			}
 		}
     }
+
+	private void OpalFlow(){
+		if (logic.GetLogicStage () == 1) {
+			ShowOpalBlessings ();
+		} else if (logic.GetLogicStage () == 2) {
+			OptionsSelected ();
+		}
+	}
+
+	private void ShowOpalBlessings(){
+		object[] blessingCards = new object[3];
+		blessingCards [0] = -1;
+		blessingCards [1] = -1;
+		blessingCards [2] = -1;
+		ShowUserChoices (blessingCards);
+	}
 
     private void MerchantFlow()
     {
@@ -170,30 +189,34 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void ShowMerchantItems()
     {
-        activeCard.HideCard();
         Item[] items = logic.GetItems();
-        activeCards = new GameObject[items.Length];
-		optionsSelected = new bool[items.Length];
-        float startingOffset = 0;
-        switch (items.Length)
-        {
-            case 2:
-				startingOffset = .5f * (CARD_WIDTH + CARD_SPACE);
-                break;
-			case 3:
-				startingOffset = CARD_WIDTH + CARD_SPACE;
-                break;
-        }
-		for (int i = 0; i < items.Length; i++) {
+		ShowUserChoices (items);
+    }
+
+	private void ShowUserChoices(object[] dataObjects){
+		activeCard.HideCard();
+		activeCards = new GameObject[dataObjects.Length];
+		optionsSelected = new bool[dataObjects.Length];
+		float startingOffset = 0;
+		switch (dataObjects.Length)
+		{
+		case 2:
+			startingOffset = .5f * (CARD_WIDTH + CARD_SPACE);
+			break;
+		case 3:
+			startingOffset = CARD_WIDTH + CARD_SPACE;
+			break;
+		}
+		for (int i = 0; i < dataObjects.Length; i++) {
 			optionsSelected [i] = false;
 			float offset = -startingOffset + i * (CARD_WIDTH + CARD_SPACE);
-            activeCards[i] = Instantiate(prefab);
-            SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
-            card.transform.position = new Vector3 (offset, CARD_HEIGHT);
-            card.transform.SetParent (canvas.transform, false);
-            card.ShowItemCard(items[i], true);
+			activeCards[i] = Instantiate(prefab);
+			SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
+			card.transform.position = new Vector3 (offset, CARD_HEIGHT);
+			card.transform.SetParent (canvas.transform, false);
+			card.ShowCard(dataObjects[i], true);
 		}
-    }
+	}
 
     private void OptionsSelected(){
 		for (int i = 0; i < activeCards.Length; i++) {
@@ -207,7 +230,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 			Destroy (activeCards [i]);
 		}
 		activeCards = null;
-		activeCard.ShowCard (-1, false);
+		activeCard.ShowCard(logic.GetActiveCard(), false);
 	}
 
     private void Decline()
