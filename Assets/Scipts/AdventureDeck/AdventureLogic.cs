@@ -90,7 +90,7 @@ public class AdventureLogic
         switch ((CardType)activeCard)
         {
             case CardType.MONSTER:
-                monsterLogic.FightMonster(hero);
+                monsterLogic.InteractWithMonster(hero);
                 break;
             case CardType.POTION:
                 potionLogic.DrinkPotion(hero);

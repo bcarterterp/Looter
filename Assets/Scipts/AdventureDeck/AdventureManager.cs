@@ -133,10 +133,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void MonsterFlow()
     {
-        if (logic.GetLogicStage() == 1)
-        {
-            activeCard.ShowMonsterCard(logic.GetMonster(), false);
-        }
+        activeCard.ShowMonsterCard(logic.GetMonster(), false);
     }
 
     private void PotionFlow()

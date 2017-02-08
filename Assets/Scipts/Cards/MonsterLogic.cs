@@ -48,7 +48,14 @@ public class MonsterLogic : CardLogic
                 monster = new Zombie(level);
                 break;
         }
+		ShouldProgress ();
     }
+
+	public void InteractWithMonster(Hero hero){
+		if (GetStage () == 1) {
+			FightMonster (hero);
+		}
+	}
 
     public void FightMonster(Hero hero)
     {
@@ -83,8 +90,10 @@ public class MonsterLogic : CardLogic
 
         if (monster.getCurrHealth() <= 0)
         {
+			roundRecap = GetMonsterDefeated ();
             hero.gainExperience(monster.getExperience());
             hero.AdjustGold(monster.getGold());
+			NextStage();
         }
     }
 
@@ -106,7 +115,6 @@ public class MonsterLogic : CardLogic
 
     private string GetMonsterEncounteredText()
     {
-        NextStage();
         switch (monsterType)
         {
             case MonsterType.HUMAN_THUG:
@@ -130,9 +138,6 @@ public class MonsterLogic : CardLogic
 
     private string GetFightRoundRecap()
     {
-		if (monster.getCurrHealth () <= 0) {
-			NextStage ();
-		}
         return roundRecap;
     }
 
