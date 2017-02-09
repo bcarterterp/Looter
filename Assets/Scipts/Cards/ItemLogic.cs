@@ -79,12 +79,12 @@ public class ItemLogic : CardLogic {
         return GetStage() == 3;
     }
 
-    public Character GetMonster()
+    public override Character GetMonster()
     {
         return monster;
     }
 
-    public Item GetItem()
+    public override Item GetItem()
     {
         return item;
     }

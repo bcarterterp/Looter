@@ -27,6 +27,11 @@ public class Blacksmith{
 
     public Item[] ListOfReforgables(Hero hero)
     {
+        return hero.GetItems();
+    }
+
+    public Item[] ListOfReforgablesWithProficiency(Hero hero)
+    {
         List<Item> items = new List<Item>();
         foreach(Item.ItemType type in proficiency)
         {

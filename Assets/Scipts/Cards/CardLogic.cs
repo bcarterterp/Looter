@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,6 @@ public class CardLogic{
 				NextStage ();
 			}
 			shouldProgress = false;
-			Debug.Log ("Progressed to Stage: " + stage);
 		}
 	}
 
@@ -57,4 +56,24 @@ public class CardLogic{
 	public virtual string GetStoryText(){
 		return "";
 	}
+
+    public virtual Item GetItem()
+    {
+        return null;
+    }
+
+    public virtual Item[] GetItems()
+    {
+        return new Item[0];
+    }
+
+    public virtual Character GetMonster()
+    {
+        return null;
+    }
+
+    public virtual int GetGold()
+    {
+        return -1;
+    }
 }

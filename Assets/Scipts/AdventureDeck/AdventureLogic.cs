@@ -73,7 +73,7 @@ public class AdventureLogic
                 cardLogic = blacksmithLogic;
                 blacksmithLogic.SetReforgeableItems(hero);
                 break;
-            case CardType.THEIF:
+            case CardType.THIEF:
                 cardLogic = thiefLogic;
                 break;
             case CardType.WELL:
@@ -98,8 +98,8 @@ public class AdventureLogic
 			case CardType.ITEM:
 				itemLogic.InteractWithItem (hero);
                 break;
-            case CardType.THEIF:
-                thiefLogic.StealItem(hero);
+            case CardType.THIEF:
+                thiefLogic.Steal(hero);
                 break;
             case CardType.WELL:
                 wellLogic.RefreshHero(hero);
@@ -156,29 +156,21 @@ public class AdventureLogic
 
     public Character GetMonster()
     {
-		switch (activeCard) {
-		case (int)CardType.ITEM:
-			return itemLogic.GetMonster();
-		default:
-			return monsterLogic.GetMonster();
-		}
+        return cardLogic.GetMonster();
     }
 
 	public Item GetItem(){
-		return itemLogic.GetItem();
+        return cardLogic.GetItem();
 	}
 
     public Item[] GetItems()
     {
-        switch ((CardType)activeCard)
-        {
-            case CardType.MERCHANT:
-                return merchantLogic.GetItems();
-            case CardType.BLACKSMITH:
-                return blacksmithLogic.GetItems();
-            default:
-                return new Item[0];
-        }
+        return cardLogic.GetItems();
+    }
+
+    public int GetGold()
+    {
+        return cardLogic.GetGold();
     }
 
 	public string GetCardText(){

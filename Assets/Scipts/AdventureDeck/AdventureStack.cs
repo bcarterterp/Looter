@@ -51,7 +51,7 @@ public class AdventureStack{
     public void CreateDungeonDeck()
     {
         cards = new List<int>();
-		Push((int)CardType.OPAL);
+		Push((int)CardType.GRAVE);
         return;
 //        int deckSize = Random.Range(0, 5)+5;
 //        for (int i = 0; i < deckSize; i++)

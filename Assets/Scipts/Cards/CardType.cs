@@ -1,4 +1,4 @@
-﻿public enum CardType{
+public enum CardType{
     MONSTER,
     POI,
     POTION,
@@ -6,7 +6,7 @@
     OPAL,
     MERCHANT,
     BLACKSMITH,
-    THEIF,
+    THIEF,
     WELL,
     GRAVE,
     GAMBLER,

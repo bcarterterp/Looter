@@ -7,6 +7,30 @@ public class WellLogic : CardLogic {
     public void RefreshHero(Hero hero)
     {
         hero.refreshHero();
+        ShouldProgress();
     }
 
+    public override string GetStoryText()
+    {
+        switch (GetStage())
+        {
+            case 0:
+                return GetDiscoveryText();
+            case 1:
+                return GetRefreshedText();
+            default:
+                return "WHAT!?!?!";
+        }
+    }
+
+    private string GetDiscoveryText()
+    {
+        ShouldProgress();
+        return "You stumble upon a well";
+    }
+
+    private string GetRefreshedText()
+    {
+        return "You feel completely refreshed!";
+    }
 }
