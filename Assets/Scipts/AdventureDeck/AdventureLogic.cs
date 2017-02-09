@@ -13,6 +13,7 @@ public class AdventureLogic
     private BlacksmithLogic blacksmithLogic;
     private ThiefLogic thiefLogic;
     private WellLogic wellLogic;
+	private GraveLogic graveLogic;
     private CardLogic cardLogic;
 
     private Persister persister; 
@@ -31,6 +32,7 @@ public class AdventureLogic
         blacksmithLogic = new BlacksmithLogic();
         thiefLogic = new ThiefLogic();
         wellLogic = new WellLogic();
+		graveLogic = new GraveLogic ();
     }
 
     public void StartGame()
@@ -79,6 +81,9 @@ public class AdventureLogic
             case CardType.WELL:
                 cardLogic = wellLogic;
                 break;
+			case CardType.GRAVE:
+				cardLogic = graveLogic;
+				break;
         }
 		cardLogic.ResetStage();
         persister.SaveHero(hero);
@@ -104,6 +109,11 @@ public class AdventureLogic
             case CardType.WELL:
                 wellLogic.RefreshHero(hero);
                 break;
+			case CardType.GRAVE:
+				if (graveLogic.GetStage () == 3) {
+					graveLogic.FightMonster (hero);
+				}
+				break;
         }
         persister.SaveHero(hero);
     }
@@ -121,6 +131,9 @@ public class AdventureLogic
             case CardType.BLACKSMITH:
                 blacksmithLogic.ReforgeItem(hero, choice);
                 break;
+			case CardType.GRAVE:
+				graveLogic.GraveOption (hero, choice);
+				break;
         }
         persister.SaveHero(hero);
     }

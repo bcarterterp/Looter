@@ -6,33 +6,33 @@ public class MonsterLogic : CardLogic
 {
 
     private Character monster;
-    private MonsterTypes monsterType;
+    private MonsterType monsterType;
     private string roundRecap;
 
     public void EncounterRandomMonster(int level)
     {
-        monsterType = (MonsterTypes)Random.Range(0, (int)MonsterTypes.TOTAL_MONSTER_TYPES);
+        monsterType = (MonsterType)Random.Range(0, (int)MonsterType.TOTAL_MONSTER_TYPES);
         switch (monsterType)
         {
-            case MonsterTypes.HUMAN_THUG:
+            case MonsterType.HUMAN_THUG:
                 monster = new HumanThug(level);
                 break;
-            case MonsterTypes.BANDIT_GOBLIN:
+            case MonsterType.BANDIT_GOBLIN:
                 monster = new BanditGoblin(level);
                 break;
-            case MonsterTypes.CYCLOPS:
+            case MonsterType.CYCLOPS:
                 monster = new Cyclops(level);
                 break;
-            case MonsterTypes.NECRO_MAGE:
+            case MonsterType.NECRO_MAGE:
                 monster = new NecroMage(level);
                 break;
-            case MonsterTypes.PHANTOM:
+            case MonsterType.PHANTOM:
                 monster = new Phantom(level);
                 break;
-            case MonsterTypes.SKELETON:
+            case MonsterType.SKELETON:
                 monster = new Skeleton(level);
                 break;
-            case MonsterTypes.ZOMBIE:
+            case MonsterType.ZOMBIE:
                 monster = new Zombie(level);
                 break;
         }
@@ -105,19 +105,19 @@ public class MonsterLogic : CardLogic
     {
         switch (monsterType)
         {
-            case MonsterTypes.HUMAN_THUG:
+            case MonsterType.HUMAN_THUG:
                 return "AY, youz wanna fight!!?!?";
-            case MonsterTypes.BANDIT_GOBLIN:
+            case MonsterType.BANDIT_GOBLIN:
                 return "Time to slice and dice!";
-            case MonsterTypes.CYCLOPS:
+            case MonsterType.CYCLOPS:
                 return "Stay still, so I can hit you!";
-            case MonsterTypes.NECRO_MAGE:
+            case MonsterType.NECRO_MAGE:
                 return "I will add you to my collection";
-            case MonsterTypes.PHANTOM:
+            case MonsterType.PHANTOM:
                 return "Diiiiiiiieeeeeeee";
-            case MonsterTypes.SKELETON:
+            case MonsterType.SKELETON:
                 return "Boned soldiers materialize behind you";
-            case MonsterTypes.ZOMBIE:
+            case MonsterType.ZOMBIE:
                 return "Braaains";
             default:
                 return "What!?!?!";
@@ -133,19 +133,19 @@ public class MonsterLogic : CardLogic
     {
         switch (monsterType)
         {
-            case MonsterTypes.HUMAN_THUG:
+            case MonsterType.HUMAN_THUG:
                 return "Wait till I call my buddies!";
-            case MonsterTypes.BANDIT_GOBLIN:
+            case MonsterType.BANDIT_GOBLIN:
                 return "I hope you blade find your heart!";
-            case MonsterTypes.CYCLOPS:
+            case MonsterType.CYCLOPS:
                 return "Can't stand no more";
-            case MonsterTypes.NECRO_MAGE:
+            case MonsterType.NECRO_MAGE:
                 return "I can never die!";
-            case MonsterTypes.PHANTOM:
+            case MonsterType.PHANTOM:
                 return "Disappeared into a woosh of smoke";
-            case MonsterTypes.SKELETON:
+            case MonsterType.SKELETON:
                 return "The skeleton crumbles into a bed of bones";
-            case MonsterTypes.ZOMBIE:
+            case MonsterType.ZOMBIE:
                 return "Body falls limp";
             default:
                 return "What!?!?!";

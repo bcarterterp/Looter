@@ -113,8 +113,12 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
             case (int)CardType.THIEF:
                 ThiefFlow();
                 break;
-            case (int)CardType.WELL:
+			case (int)CardType.WELL:
+				WellFlow ();
                 break;
+			case (int)CardType.GRAVE:
+				GraveFlow ();
+				break;
         }
         storyText.text = logic.GetCardText();
         UpdatePanel();
@@ -263,6 +267,38 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
     {
 
     }
+
+	private void GraveFlow(){
+		if (logic.GetLogicStage () == 1) {
+			ShowGraveOptions ();
+		} else if (logic.GetLogicStage () == 2) {
+			OptionsSelected (null);
+			if (logic.GetMonster () != null) {
+				activeCard.ShowCard (logic.GetMonster (), false);
+			} else if (logic.GetItem () != null) {
+				activeCard.ShowCard (logic.GetItem (), false);
+			} else {
+				activeCard.ShowCard (-1, false);
+			}
+		} else if (logic.GetLogicStage () == 3) {
+			if (logic.GetMonster () != null) {
+				activeCard.ShowCard (logic.GetMonster (), false);
+			} else {
+				if (logic.GetItem () != null) {
+					activeCard.ShowCard (logic.GetItem (), false);
+				} else {
+					activeCard.ShowCard (-1, false);
+				}
+			}
+		}
+	}
+
+	private void ShowGraveOptions(){
+		object[] graveOptions = new object[2];
+		graveOptions[0] = -1;
+		graveOptions[1] = -1;
+		ShowUserChoices(graveOptions);
+	}
 
     private void ShowUserChoices(object[] dataObjects)
     {
