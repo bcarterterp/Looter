@@ -5,16 +5,8 @@ public class AdventureLogic
     private AdventureStack mainDeck;
 
     private Hero hero;
-    private MonsterLogic monsterLogic;
-    private PotionLogic potionLogic;
-    private ItemLogic itemLogic;
-    private OpalLogic opalLogic;
-    private MerchantLogic merchantLogic;
-    private BlacksmithLogic blacksmithLogic;
-    private ThiefLogic thiefLogic;
-    private WellLogic wellLogic;
-	private GraveLogic graveLogic;
     private CardLogic cardLogic;
+	private PotionLogic potionLogic;
 
     private Persister persister; 
     private int activeCard;
@@ -24,15 +16,7 @@ public class AdventureLogic
         persister = new Persister();
         this.hero = persister.LoadSavedHero();
         mainDeck = new AdventureStack();
-        monsterLogic = new MonsterLogic();
-        potionLogic = new PotionLogic();
-        itemLogic = new ItemLogic();
-        opalLogic = new OpalLogic();
-        merchantLogic = new MerchantLogic();
-        blacksmithLogic = new BlacksmithLogic();
-        thiefLogic = new ThiefLogic();
-        wellLogic = new WellLogic();
-		graveLogic = new GraveLogic ();
+		potionLogic = new PotionLogic ();
     }
 
     public void StartGame()
@@ -53,36 +37,40 @@ public class AdventureLogic
         switch ((CardType)activeCard)
         {
             case CardType.MONSTER:
+				MonsterLogic monsterLogic = new MonsterLogic();
+				monsterLogic.EncounterRandomMonster(hero.getLevel());
                 cardLogic = monsterLogic;
-                monsterLogic.EncounterRandomMonster(hero.getLevel());
                 break;
 			case CardType.POTION:
-				potionLogic.DiscoverPotion ();
+				potionLogic.DiscoverPotion();
                 cardLogic = potionLogic;
                 break;
             case CardType.ITEM:
-                cardLogic = itemLogic;
+				ItemLogic itemLogic = new ItemLogic();
                 itemLogic.GenerateItem(hero.getLevel());
+				cardLogic = itemLogic;
                 break;
             case CardType.OPAL:
-                cardLogic = opalLogic;
+				cardLogic = new OpalLogic();
                 break;
-            case CardType.MERCHANT:
-                merchantLogic.GenerateItems(hero.getLevel());
+			case CardType.MERCHANT:
+				MerchantLogic merchantLogic = new MerchantLogic ();
+				merchantLogic.GenerateItems(hero.getLevel());
                 cardLogic = merchantLogic;
                 break;
-            case CardType.BLACKSMITH:
-                cardLogic = blacksmithLogic;
+			case CardType.BLACKSMITH:
+				BlacksmithLogic blacksmithLogic = new BlacksmithLogic();
                 blacksmithLogic.SetReforgeableItems(hero);
+				cardLogic = blacksmithLogic;
                 break;
             case CardType.THIEF:
-                cardLogic = thiefLogic;
+				cardLogic = new ThiefLogic();
                 break;
             case CardType.WELL:
-                cardLogic = wellLogic;
+				cardLogic = new WellLogic();
                 break;
 			case CardType.GRAVE:
-				cardLogic = graveLogic;
+			cardLogic = new GraveLogic();
 				break;
         }
 		cardLogic.ResetStage();
@@ -92,49 +80,13 @@ public class AdventureLogic
 
     public void InteractWithActiveCard()
     {
-        switch ((CardType)activeCard)
-        {
-            case CardType.MONSTER:
-                monsterLogic.InteractWithMonster(hero);
-                break;
-            case CardType.POTION:
-                potionLogic.DrinkPotion(hero);
-                break;
-			case CardType.ITEM:
-				itemLogic.InteractWithItem (hero);
-                break;
-            case CardType.THIEF:
-                thiefLogic.Steal(hero);
-                break;
-            case CardType.WELL:
-                wellLogic.RefreshHero(hero);
-                break;
-			case CardType.GRAVE:
-				if (graveLogic.GetStage () == 3) {
-					graveLogic.FightMonster (hero);
-				}
-				break;
-        }
+		cardLogic.Interact (hero);
         persister.SaveHero(hero);
     }
 
     public void InteractWithActiveCard(int choice)
     {
-        switch ((CardType)activeCard)
-        {
-            case CardType.OPAL:
-                opalLogic.RubOpal(hero, choice);
-                break;
-            case CardType.MERCHANT:
-                merchantLogic.BuyItem(hero, choice);
-                break;
-            case CardType.BLACKSMITH:
-                blacksmithLogic.ReforgeItem(hero, choice);
-                break;
-			case CardType.GRAVE:
-				graveLogic.GraveOption (hero, choice);
-				break;
-        }
+		cardLogic.Interact (hero, choice);
         persister.SaveHero(hero);
     }
 

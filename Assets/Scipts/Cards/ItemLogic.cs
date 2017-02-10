@@ -24,7 +24,7 @@ public class ItemLogic : CardLogic {
 		ShouldProgress ();
     }
 
-	public void InteractWithItem(Hero hero){
+	public override void Interact(Hero hero){
 		switch (GetStage ()) {
 		case 2:
 			FightMonster (hero);

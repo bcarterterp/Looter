@@ -14,6 +14,14 @@ public class CardLogic{
 		shouldProgress = false;
     }
 
+	public virtual void Interact(Hero hero){
+
+	}
+
+	public virtual void Interact(Hero hero, int option){
+
+	}
+
 	public virtual void StageCheck(){
 		if (shouldProgress) {
 			if (progressToStage > -1) {

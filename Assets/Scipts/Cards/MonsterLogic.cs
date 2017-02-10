@@ -39,7 +39,7 @@ public class MonsterLogic : CardLogic
 		ShouldProgress ();
     }
 
-	public void InteractWithMonster(Hero hero){
+	public override void Interact(Hero hero){
 		if (GetStage () == 1) {
 			FightMonster (hero);
 		}

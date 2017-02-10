@@ -33,6 +33,11 @@ public class PotionLogic : CardLogic {
 		ShouldProgress ();
 	}
 
+	public override void Interact (Hero hero)
+	{
+		DrinkPotion (hero);
+	}
+
 	public void DrinkPotion(Hero hero)
     {
         potion.drinkPotion(hero);

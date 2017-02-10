@@ -10,10 +10,22 @@ public class GraveLogic : CardLogic {
     private Character monster;
 	private string roundRecap;
 
+	public override void Interact (Hero hero)
+	{
+		if (GetStage () == 3) {
+			FightMonster (hero);
+		}
+	}
+
+	public override void Interact (Hero hero, int option)
+	{
+		GraveOption (hero, option);
+	}
+
 	public void GraveOption(Hero hero, int choice){
 		gold = 0;
 		option = choice;
-		if (Random.Range (0, 1) == 0) {
+		if (Random.Range (0, 2) == 0) {
 			monster = new Zombie (hero.getLevel ());
 			ShouldProgress ();
 		} else {

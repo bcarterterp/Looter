@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class WellLogic : CardLogic {
 
+	public override void Interact (Hero hero)
+	{
+		RefreshHero (hero);
+	}
+
     public void RefreshHero(Hero hero)
     {
         hero.refreshHero();

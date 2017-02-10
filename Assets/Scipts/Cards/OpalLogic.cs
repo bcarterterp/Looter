@@ -8,6 +8,11 @@ public class OpalLogic : CardLogic
     Opal opal = new Opal();
     private int choice;
 
+	public override void Interact (Hero hero, int option)
+	{
+		RubOpal (hero, option);
+	}
+
     public void RubOpal(Hero hero, int selection)
     {
         choice = selection;

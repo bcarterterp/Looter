@@ -14,6 +14,10 @@ public class BlacksmithLogic : CardLogic {
         ShouldProgress();
     }
 
+	public override void Interact(Hero hero, int option){
+		ReforgeItem (hero, option);
+	}
+
     public void ReforgeItem(Hero hero, int choice)
     {
         Item.ItemType type = items[choice].getType();

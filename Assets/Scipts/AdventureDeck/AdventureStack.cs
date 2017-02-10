@@ -53,26 +53,5 @@ public class AdventureStack{
         cards = new List<int>();
 		Push((int)CardType.GRAVE);
         return;
-//        int deckSize = Random.Range(0, 5)+5;
-//        for (int i = 0; i < deckSize; i++)
-//        {
-//            int cardProbability = Random.Range(0,100);
-//            if (cardProbability < 80)
-//            {
-//                Push((int)CardType.MONSTER);
-//            }
-//            else
-//            {
-//                switch (Random.Range(0, SPECIALTY_CARDS))
-//                {
-//                    case 0:
-//                        Push((int)CardType.ITEM);
-//                        break;
-//                    case 1:
-//                        Push((int)CardType.POTION);
-//                        break;
-//                }
-//            }
-//        }
     }
 }

@@ -8,6 +8,11 @@ public class ThiefLogic : CardLogic
     private Item stolenItem;
     private int stolenGold;
 
+	public override void Interact (Hero hero)
+	{
+		Steal (hero);
+	}
+
     public void Steal(Hero hero)
     {
         stolenItem = hero.removeRandomEquipment();

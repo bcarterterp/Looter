@@ -14,6 +14,11 @@ public class MerchantLogic : CardLogic
         ShouldProgress();
     }
 
+	public override void Interact (Hero hero, int option)
+	{
+		BuyItem (hero, option);
+	}
+
     public void BuyItem(Hero hero, int choice)
     {
         hero.AdjustGold(-items[choice].getPrice());
