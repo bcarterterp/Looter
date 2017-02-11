@@ -70,7 +70,10 @@ public class AdventureLogic
 				cardLogic = new WellLogic();
                 break;
 			case CardType.GRAVE:
-			cardLogic = new GraveLogic();
+				cardLogic = new GraveLogic();
+				break;
+			case CardType.GAMBLER:
+				cardLogic = new GamblerLogic ();
 				break;
         }
 		cardLogic.ResetStage();

@@ -12,5 +12,6 @@ public enum CardType{
     GAMBLER,
     PASSERBY,
     TRAP_DOOR,
+	RESCUED,
     TOTAL_CARD_TYPES
 }
