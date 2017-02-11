@@ -75,6 +75,12 @@ public class AdventureLogic
 			case CardType.GAMBLER:
 				cardLogic = new GamblerLogic ();
 				break;
+            case CardType.PASSERBY:
+                cardLogic = new PasserbyLogic(mainDeck);
+                break;
+            case CardType.RESCUED:
+                cardLogic = new RescuedLogic();
+                break;
         }
 		cardLogic.ResetStage();
         persister.SaveHero(hero);

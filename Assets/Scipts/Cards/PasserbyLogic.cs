@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,10 +21,10 @@ public class PasserbyLogic : CardLogic {
 	}
 
 	public void PopulateAdventureStack(){
-		stack.Push (CardType.RESCUED);
-		numberOfMonsters = Random.Range (0, 4);
+		stack.Push ((int)CardType.RESCUED);
+		numberOfMonsters = Random.Range (0, 2)+2;
 		for (int i = 0; i < numberOfMonsters; i++) {
-			stack.Push (CardType.MONSTER);
+			stack.Push ((int)CardType.MONSTER);
 		}
 	}
 
@@ -41,7 +41,8 @@ public class PasserbyLogic : CardLogic {
 	}
 
 	private string GetDiscoveryText(){
-		return "Help! My father has been kidnapped, will you help bring him back?";
+        ShouldProgress();
+        return "Help! My father has been kidnapped, will you help bring him back?";
 	}
 
 	private string GetAcceptedText(){

@@ -31,7 +31,7 @@ public class SelectableCard : MonoBehaviour {
 
     public void ShowCard(Item item, bool enabled)
     {
-        ShowCard(3, enabled);
+        ShowCard(2, enabled);
         top.enabled = true;
         top.text = "Health: " + item.getHealth();
         middle.enabled = true;

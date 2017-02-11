@@ -51,7 +51,7 @@ public class AdventureStack{
     public void CreateDungeonDeck()
     {
         cards = new List<int>();
-		Push((int)CardType.PASSERBY);
+		Push((int)CardType.ITEM);
         return;
     }
 }

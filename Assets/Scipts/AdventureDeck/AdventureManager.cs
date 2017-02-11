@@ -113,15 +113,21 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
             case (int)CardType.THIEF:
                 ThiefFlow();
                 break;
-			case (int)CardType.WELL:
-				WellFlow ();
+            case (int)CardType.WELL:
+                WellFlow();
                 break;
-			case (int)CardType.GRAVE:
-				GraveFlow ();
-				break;
-			case (int)CardType.GAMBLER:
-				GamblerFlow ();
-				break;
+            case (int)CardType.GRAVE:
+                GraveFlow();
+                break;
+            case (int)CardType.GAMBLER:
+                GamblerFlow();
+                break;
+            case (int)CardType.PASSERBY:
+                PasserbyFlow();
+                break;
+            case (int)CardType.RESCUED:
+                RescuedFlow();
+                break;
         }
         storyText.text = logic.GetCardText();
         UpdatePanel();
@@ -144,7 +150,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void ArrivalStage()
     {
-		DestroyCreatedCards ();
+        DestroyCreatedCards();
         activeCard.HideCard();
         storyText.text = storyGenerator.GetArrivalText();
         logic.Restart();
@@ -195,7 +201,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         }
         else if (logic.GetLogicStage() == 2)
         {
-			OptionsSelectedAndDestroy(logic.GetActiveCard());
+            OptionsSelectedAndDestroy(logic.GetActiveCard());
         }
     }
 
@@ -216,7 +222,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         }
         else if (logic.GetLogicStage() == 2)
         {
-			OptionsSelectedAndDestroy(logic.GetActiveCard());
+            OptionsSelectedAndDestroy(logic.GetActiveCard());
         }
     }
 
@@ -234,7 +240,7 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         }
         else if (logic.GetLogicStage() == 2)
         {
-			OptionsSelectedAndDestroy(null);
+            OptionsSelectedAndDestroy(null);
             activeCard.ShowCard(logic.GetItem(), false);
         }
         else if (logic.GetLogicStage() == 3)
@@ -258,9 +264,11 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
             {
                 activeCard.ShowCard(item, false);
             }
-            else if(logic.GetGold() > 0){
+            else if (logic.GetGold() > 0)
+            {
                 activeCard.ShowCard(-1, false);
-            }else
+            }
+            else
             {
                 activeCard.ShowCard(-1, false);
             }
@@ -272,64 +280,110 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     }
 
-	private void GraveFlow(){
-		if (logic.GetLogicStage () == 1) {
-			ShowGraveOptions ();
-		} else if (logic.GetLogicStage () == 2) {
-			OptionsSelectedAndDestroy (null);
-			if (logic.GetMonster () != null) {
-				activeCard.ShowCard (logic.GetMonster (), false);
-			} else if (logic.GetItem () != null) {
-				activeCard.ShowCard (logic.GetItem (), false);
-			} else {
-				activeCard.ShowCard (-1, false);
-			}
-		} else if (logic.GetLogicStage () == 3) {
-			if (logic.GetMonster () != null) {
-				activeCard.ShowCard (logic.GetMonster (), false);
-			} else {
-				if (logic.GetItem () != null) {
-					activeCard.ShowCard (logic.GetItem (), false);
-				} else {
-					activeCard.ShowCard (-1, false);
-				}
-			}
-		}
-	}
+    private void GraveFlow()
+    {
+        if (logic.GetLogicStage() == 1)
+        {
+            ShowGraveOptions();
+        }
+        else if (logic.GetLogicStage() == 2)
+        {
+            OptionsSelectedAndDestroy(null);
+            if (logic.GetMonster() != null)
+            {
+                activeCard.ShowCard(logic.GetMonster(), false);
+            }
+            else if (logic.GetItem() != null)
+            {
+                activeCard.ShowCard(logic.GetItem(), false);
+            }
+            else
+            {
+                activeCard.ShowCard(-1, false);
+            }
+        }
+        else if (logic.GetLogicStage() == 3)
+        {
+            if (logic.GetMonster() != null)
+            {
+                activeCard.ShowCard(logic.GetMonster(), false);
+            }
+            else
+            {
+                if (logic.GetItem() != null)
+                {
+                    activeCard.ShowCard(logic.GetItem(), false);
+                }
+                else
+                {
+                    activeCard.ShowCard(-1, false);
+                }
+            }
+        }
+    }
 
-	private void ShowGraveOptions(){
-		object[] graveOptions = new object[2];
-		graveOptions[0] = -1;
-		graveOptions[1] = -1;
-		ShowUserChoices(graveOptions);
-	}
+    private void ShowGraveOptions()
+    {
+        object[] graveOptions = new object[2];
+        graveOptions[0] = -1;
+        graveOptions[1] = -1;
+        ShowUserChoices(graveOptions);
+    }
 
-	private void GamblerFlow(){
-		if (logic.GetLogicStage () == 1) {
-			ShowShellGame ();
-		} else if (logic.GetLogicStage () == 2) {
-			OptionsSelected ();
-			ShowSelectedCard ();
-		}
-	}
+    private void GamblerFlow()
+    {
+        if (logic.GetLogicStage() == 1)
+        {
+            ShowShellGame();
+        }
+        else if (logic.GetLogicStage() == 2)
+        {
+            OptionsSelected();
+            ShowSelectedCard();
+        }
+    }
 
-	private void ShowShellGame(){
-		object[] shellChoices = new object[3];
-		shellChoices[0] = -1;
-		shellChoices[1] = -1;
-		shellChoices[2] = -1;
-		ShowUserChoices(shellChoices);
-	}
+    private void ShowShellGame()
+    {
+        object[] shellChoices = new object[3];
+        shellChoices[0] = -1;
+        shellChoices[1] = -1;
+        shellChoices[2] = -1;
+        ShowUserChoices(shellChoices);
+    }
 
-	private void ShowSelectedCard(){
-		for (int i = 0; i < activeCards.Length; i++) {
-			SelectableCard card = activeCards [i].GetComponent<SelectableCard> ();
-			if (card.IsSelected ()) {
-				card.ShowCard ((int)CardType.OPAL, false);
-				break;
-			}
-		}
-	}
+    private void PasserbyFlow()
+    {
+        
+    }
+
+    private void RescuedFlow()
+    {
+        if(logic.GetLogicStage() == 1)
+        {
+            if(logic.GetItem() != null)
+            {
+                activeCard.ShowCard(logic.GetItem(), false);
+            }
+            else
+            {
+                activeCard.ShowCard(-1, false);
+            }
+        }
+    }
+
+    private void ShowSelectedCard()
+    {
+        for (int i = 0; i < activeCards.Length; i++)
+        {
+            SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
+            if (card.IsSelected())
+            {
+                card.ShowCard((int)CardType.OPAL, false);
+                break;
+            }
+        }
+    }
 
     private void ShowUserChoices(object[] dataObjects)
     {
@@ -360,8 +414,8 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
 
     private void OptionsSelectedAndDestroy(object focusCard)
     {
-		CardSelected ();
-		DestroyCreatedCards ();
+        CardSelected();
+        DestroyCreatedCards();
         activeCards = null;
         if (focusCard != null)
         {
@@ -369,24 +423,29 @@ public class AdventureManager : MonoBehaviour, CardSelectedListener
         }
     }
 
-	private void OptionsSelected(){
-		for (int i = 0; i < activeCards.Length; i++)
-		{
-			SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
-			if (card.IsSelected())
-			{
-				logic.InteractWithActiveCard(i);
-				break;
-			}
-		}
-	}
+    private void OptionsSelected()
+    {
+        for (int i = 0; i < activeCards.Length; i++)
+        {
+            SelectableCard card = activeCards[i].GetComponent<SelectableCard>();
+            if (card.IsSelected())
+            {
+                logic.InteractWithActiveCard(i);
+                break;
+            }
+        }
+    }
 
-	private void DestroyCreatedCards(){
-		for (int i = 0; i < activeCards.Length; i++)
-		{
-			Destroy(activeCards[i]);
-		}
-	}
+    private void DestroyCreatedCards()
+    {
+        if (activeCards != null)
+        {
+            for (int i = 0; i < activeCards.Length; i++)
+            {
+                Destroy(activeCards[i]);
+            }
+        }
+    }
 
     private void Decline()
     {

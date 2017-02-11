@@ -1,6 +1,5 @@
 public enum CardType{
     MONSTER,
-    POI,
     POTION,
     ITEM,
     OPAL,
