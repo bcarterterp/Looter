@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Node
 {
@@ -27,22 +28,17 @@ public class Node
         foreach (Node node in linkedNodes.Values)
         {
             LineEquation neighborLine = new LineEquation(coord, node.GetCoords());
-            int index = -1;
-            for (int i = 0; i < lineList.Count; i++)
+            int index = 0;
+			while(index != lineList.Count)
             {
-                LineEquation centerLine = lineList[i];
-                Tuple<double, double> intersection = neighborLine.GetIntersectionWithLine(centerLine);
-                if (intersection != null)
+                LineEquation centerLine = lineList[index];
+
+				if (centerLine.IntersectsAtEdge (neighborLine))
                 {
-                    if (!(coord == centerLine.End) && !(node.GetCoords() == centerLine.End))
-                    {
-                        index = i;
-                    }
+					lineList.RemoveAt(index);
+					continue;
                 }
-            }
-            if(index != -1)
-            {
-                lineList.RemoveAt(index);
+				index++;
             }
         }
     }
