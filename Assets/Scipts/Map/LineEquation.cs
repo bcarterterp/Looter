@@ -39,24 +39,56 @@ public class LineEquation
         return new Tuple<double, double>(x, y);
     }
 
-	//I am ommiting end points for intersection
-	public bool IntersectsAtEdge(LineEquation otherLine)
-	{
-		Tuple <double,double> intersection = GetIntersectionWithLine (otherLine);
+    //I am ommiting end points for intersection
+    public bool IntersectsAtEdge(LineEquation otherLine)
+    {
+        Tuple<double, double> intersection = GetIntersectionWithLine(otherLine);
 
-		if (intersection != null 
-			&& IsBetweenTwoPoints(intersection, Start, End)
-			&& End != otherLine.Start
-			&& End != otherLine.End
-			&& Start != otherLine.Start
-			&& Start != otherLine.End) {
-			return true;
-		}
+        if (intersection != null) {
+
+            if (IsBetweenTwoPoints(intersection, Start, End)
+            && End != otherLine.Start && End != otherLine.End
+            && Start != otherLine.Start && Start != otherLine.End) {
+                return true;
+            }
+
+        }
+        else
+        {
+            bool StartInBetween = IsBetweenTwoPoints(otherLine.Start, Start, End);
+            bool EndInBetween = IsBetweenTwoPoints(otherLine.End, Start, End);
+
+            bool StartSameNode = Start == otherLine.Start || Start == otherLine.End;
+            bool EndSameNode = End == otherLine.Start || End == otherLine.End;
+
+            if(EndInBetween == false && StartInBetween == false)
+            {
+                StartInBetween = IsBetweenTwoPoints(Start, otherLine.Start, otherLine.End);
+                EndInBetween = IsBetweenTwoPoints(End, otherLine.Start, otherLine.End);
+
+                return !(EndInBetween == false && StartInBetween == false);
+            }
+            else if(StartInBetween != EndInBetween && StartSameNode != EndSameNode)
+            {
+                return false;
+            }else
+            {
+                return true;
+            }
+            
+        }
 
 		return false;
 	}
 
-	public bool IsBetweenTwoPoints(Tuple<double,double> targetPoint, Tuple<int,int> point1, Tuple<int,int> point2)
+    public bool IsBetweenTwoPoints(Tuple<int, int> targetPoint, Tuple<int, int> point1, Tuple<int, int> point2)
+    {
+        Tuple<double, double> convertedTuple = new Tuple<double, double>(targetPoint.Item1, targetPoint.Item2);
+        return IsBetweenTwoPoints(convertedTuple, point1, point2);
+    }
+
+
+    public bool IsBetweenTwoPoints(Tuple<double,double> targetPoint, Tuple<int,int> point1, Tuple<int,int> point2)
 	{
 		double minX = Mathf.Min(point1.Item1, point2.Item1);
 		double minY = Mathf.Min(point1.Item2, point2.Item2);

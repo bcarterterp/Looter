@@ -6,16 +6,16 @@ public class Map
 {
 
     private int activeNodeID, id;
-    public Dictionary<int, Node> nodes;
+    private Dictionary<int, Node> nodes;
 
     public Map()
     {
         id = 0;
         activeNodeID = id;
         nodes = new Dictionary<int, Node>();
-        //Node home = new Node(activeNodeID);
-        //home.SetCoords(new Tuple<int, int>(0, 0));
-        //nodes.Add(id, home);
+        Node home = new Node(activeNodeID);
+        home.SetCoords(new Tuple<int, int>(0, 0));
+        nodes.Add(id, home);
     }
 
     public List<LineEquation> GetOffLimitCoords(Node centerNode)

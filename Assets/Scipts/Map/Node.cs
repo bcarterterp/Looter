@@ -33,7 +33,7 @@ public class Node
             {
                 LineEquation centerLine = lineList[index];
 
-				if (centerLine.IntersectsAtEdge (neighborLine))
+				if (centerLine.IntersectsAtEdge(neighborLine))
                 {
 					lineList.RemoveAt(index);
 					continue;
