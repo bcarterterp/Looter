@@ -23,15 +23,54 @@ public class Map
 		return nodes [nodeID];
 	}
 
+	public Node[] MoveToNode(int nodeID){
+		if (IsValidMove (nodeID)) {
+			Node node = nodes [nodeID];
+			int nodeIndex = nodes.Count;
+			GenerateNeighbors (node);
+			if (nodes.Count > nodeIndex) {
+				int[] returnedList = nodes.Values.ToArray ();
+				return returnedList.Skip (nodeIndex).Take (nodes.Count - 1).ToArray ();
+			}
+		}
+		return null;
+	}
+
 	public bool IsValidMove(int nodeID){
 		Node node = nodes [activeNodeID];
 		return node.isNeighbor (nodeID);
 	}
 
-	public void MoveToNode(int nodeID){
-		if (IsValidMove (nodeID)) {
-			Node node = 
+	public void GenerateNeighbors(Node node)
+	{
+		int numberOfNeighbors = Random.Range(1, 5);
+		List<LineEquation> validLocations = GetOffLimitCoords(node);
+		if(validLocations.Count < numberOfNeighbors)
+		{
+			numberOfNeighbors = validLocations.Count;
 		}
+		for (int i = 0; i < numberOfNeighbors; i++)
+		{
+			Node newNode = GenerateNeighbor(validLocations, node);
+			node.LinkNodes(newNode);
+			newNode.LinkNodes(node);
+		}
+		node.SetGeneratedNeighbors(true);
+	}
+
+	public List<LineEquation> GetOffLimitCoords(Node centerNode)
+	{
+		List<LineEquation> lineList = GenerateIntersecter(centerNode);
+		foreach (Node node in nodes.Values)
+		{
+			int xDistance = Mathf.Abs(centerNode.GetXCoord() - node.GetXCoord());
+			int yDistance = Mathf.Abs(centerNode.GetYCoord() - node.GetYCoord());
+			if (xDistance <= 4 || yDistance <= 4)
+			{
+				node.AddInvalidCoords(lineList);
+			}
+		}
+		return lineList;
 	}
 
 	public List<LineEquation> GenerateIntersecter(Node centerNode)
@@ -54,38 +93,6 @@ public class Map
 		}
 		return lineList;
 	}
-
-    public List<LineEquation> GetOffLimitCoords(Node centerNode)
-    {
-        List<LineEquation> lineList = GenerateIntersecter(centerNode);
-        foreach (Node node in nodes.Values)
-        {
-            int xDistance = Mathf.Abs(centerNode.GetXCoord() - node.GetXCoord());
-            int yDistance = Mathf.Abs(centerNode.GetYCoord() - node.GetYCoord());
-            if (xDistance <= 4 || yDistance <= 4)
-            {
-                node.AddInvalidCoords(lineList);
-            }
-        }
-        return lineList;
-    }
-
-    public void GenerateNeighbors(Node node)
-    {
-        int numberOfNeighbors = Random.Range(1, 5);
-        List<LineEquation> validLocations = GetOffLimitCoords(node);
-        if(validLocations.Count < numberOfNeighbors)
-        {
-            numberOfNeighbors = validLocations.Count;
-        }
-        for (int i = 0; i < numberOfNeighbors; i++)
-        {
-            Node newNode = GenerateNeighbor(validLocations, node);
-            node.LinkNodes(newNode);
-            newNode.LinkNodes(node);
-        }
-        node.SetGeneratedNeighbors(true);
-    }
 
     private Node GenerateNeighbor(List<LineEquation> validLocations, Node centerNode)
     {

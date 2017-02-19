@@ -10,10 +10,11 @@ public class MapManager : MonoBehaviour {
 	public Sprite unoccupiedNode, occupiedNode;
 
 	private Dictionary<Button, int> nodeButtons;
+	private Map map;
 
 	// Use this for initialization
 	void Start () {
-        Map map = new Map();
+        map = new Map();
 		Node[] nodes = map.GetNodes ();
 		nodeButtons = new Dictionary<Button, int> ();
 		foreach (Node node in nodes) {
@@ -31,7 +32,8 @@ public class MapManager : MonoBehaviour {
 		}
     }
 
-	private void MoveToNewNode(){
+	private void MoveToNewNode(int nodeId){
+		map.MoveToNode (nodeId);
 
 	}
 }
