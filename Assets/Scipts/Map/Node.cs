@@ -93,6 +93,10 @@ public class Node
         generatedNeighbors = hasGenerated;
     }
 
+	public bool isNeighbor(int nodeID){
+		return linkedNodes.ContainsKey (nodeID);
+	}
+
     public override string ToString()
     {
         return string.Format("{0}:({1},{2})", name, GetXCoord(), GetYCoord());

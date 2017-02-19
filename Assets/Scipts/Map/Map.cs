@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Map
@@ -17,6 +18,42 @@ public class Map
         home.SetCoords(new Tuple<int, int>(0, 0));
         nodes.Add(id, home);
     }
+
+	public Node GetNode(int nodeID){
+		return nodes [nodeID];
+	}
+
+	public bool IsValidMove(int nodeID){
+		Node node = nodes [activeNodeID];
+		return node.isNeighbor (nodeID);
+	}
+
+	public void MoveToNode(int nodeID){
+		if (IsValidMove (nodeID)) {
+			Node node = 
+		}
+	}
+
+	public List<LineEquation> GenerateIntersecter(Node centerNode)
+	{
+		List<LineEquation> lineList = new List<LineEquation>();
+		int x = centerNode.GetXCoord();
+		int y = centerNode.GetYCoord();
+		Tuple<int, int> start = new Tuple<int, int>(x, y);
+		for (int i = -2; i < 3; i++)
+		{
+			for (int j = -2; j < 3; j++)
+			{
+				Tuple<int, int> end = new Tuple<int, int>(x + i, y + j);
+				LineEquation line = new LineEquation(start, end);
+				if (i != 0 || j != 0)
+				{
+					lineList.Add(line);
+				}
+			}
+		}
+		return lineList;
+	}
 
     public List<LineEquation> GetOffLimitCoords(Node centerNode)
     {
@@ -117,24 +154,7 @@ public class Map
         }
     }
 
-    public List<LineEquation> GenerateIntersecter(Node centerNode)
-    {
-        List<LineEquation> lineList = new List<LineEquation>();
-        int x = centerNode.GetXCoord();
-        int y = centerNode.GetYCoord();
-        Tuple<int, int> start = new Tuple<int, int>(x, y);
-        for (int i = -2; i < 3; i++)
-        {
-            for (int j = -2; j < 3; j++)
-            {
-                Tuple<int, int> end = new Tuple<int, int>(x + i, y + j);
-                LineEquation line = new LineEquation(start, end);
-                if (i != 0 || j != 0)
-                {
-                    lineList.Add(line);
-                }
-            }
-        }
-        return lineList;
-    }
+	public Node[] GetNodes(){
+		return nodes.Values.ToArray();
+	}
 }
