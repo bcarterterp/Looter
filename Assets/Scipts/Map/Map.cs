@@ -29,7 +29,7 @@ public class Map
 			int nodeIndex = nodes.Count;
 			GenerateNeighbors (node);
 			if (nodes.Count > nodeIndex) {
-				int[] returnedList = nodes.Values.ToArray ();
+				Node[] returnedList = nodes.Values.ToArray();
 				return returnedList.Skip (nodeIndex).Take (nodes.Count - 1).ToArray ();
 			}
 		}

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapManager : MonoBehaviour {
+public class MapManager : MonoBehaviour, NodeSelectedListener {
+
+    public const int UNIT_SCALE = 100;
 
 	public GameObject nodePrefab;
 	public Canvas canvas;
@@ -21,19 +24,23 @@ public class MapManager : MonoBehaviour {
 			float x = 0;
 			float y = 0;
 			Tuple<int,int> coords = node.GetCoords ();
-			x += coords.Item1 * 100;
-			y += coords.Item2 * 100;
-			Debug.Log ("x" + x +", y" + y);
+			x += coords.Item1 * UNIT_SCALE;
+			y += coords.Item2 * UNIT_SCALE;
 			Button 	nodeButton = Instantiate (nodePrefab).GetComponent<Button>();
 			nodeButton.transform.position = new Vector3(x, y);
 			nodeButton.transform.SetParent (canvas.transform, false);
 			nodeButton.GetComponentInChildren<Text>().text = node.GetName ();
+            nodeButton.GetComponentInChildren<NodeScript>().SetNodeSelectedListener(this, node.GetID());
 			nodeButtons.Add (nodeButton, node.GetID());
 		}
     }
 
-	private void MoveToNewNode(int nodeId){
-		map.MoveToNode (nodeId);
+    public void NodeSelected(int nodeID)
+    {
+        Node[] newNodes = map.MoveToNode(nodeID);
+        foreach (Node node in newNodes)
+        {
 
-	}
+        }
+    }
 }
