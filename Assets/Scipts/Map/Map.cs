@@ -14,16 +14,22 @@ public class Map
         id = 0;
         activeNodeID = id;
         nodes = new Dictionary<int, Node>();
-        Node home = new Node(activeNodeID);
-        home.SetCoords(new Tuple<int, int>(0, 0));
-        nodes.Add(id, home);
+		initMap ();
     }
+
+	public void initMap(){
+		Node home = new Node(activeNodeID);
+		home.SetCoords(new Tuple<int, int>(0, 0));
+		nodes.Add(id, home);
+		GenerateNeighbors (home);
+	}
 
 	public Node GetNode(int nodeID){
 		return nodes [nodeID];
 	}
 
 	public Node[] MoveToNode(int nodeID){
+		Debug.Log (IsValidMove (nodeID));
 		if (IsValidMove (nodeID)) {
 			Node node = nodes [nodeID];
 			int nodeIndex = nodes.Count;
@@ -32,6 +38,7 @@ public class Map
 				Node[] returnedList = nodes.Values.ToArray();
 				return returnedList.Skip (nodeIndex).Take (nodes.Count - 1).ToArray ();
 			}
+			activeNodeID = nodeID;
 		}
 		return null;
 	}

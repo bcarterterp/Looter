@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class NodeScript : MonoBehaviour{
 
-    Button nodeButton;
-    NodeSelectedListener listener;
-    int nodeID;
+    public Button nodeButton;
+	public Sprite inactiveNode, activeNode;
+
+    private NodeSelectedListener listener;
+    private int nodeID;
 
     public void SetNodeSelectedListener(NodeSelectedListener nodeSelected, int ID){
         listener = nodeSelected;
@@ -18,5 +20,9 @@ public class NodeScript : MonoBehaviour{
     {
         listener.NodeSelected(nodeID);
     }
+
+	public void SetAsActiveNode(){
+		nodeButton.image.sprite = activeNode;
+	}
 
 }

@@ -11,7 +11,7 @@ public class ItemLogic : CardLogic {
     public void GenerateItem(int level)
     {
 		item = new Item(level);
-        if (Random.Range(0, 1) == 0)
+        if (Random.Range(0, 2) == 0)
         {
             monster = new Phantom(level);
 			monster.setHealth (monster.getHealth () + item.getHealth ());
