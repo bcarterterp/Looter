@@ -58,11 +58,11 @@ public class MonsterLogic : CardLogic
         {
             if (hero.CharacterWillMiss(monster))
             {
-                roundRecap += "You miss and";
+                roundRecap += "You miss and ";
             }else
             {
                 int damage = hero.fightCharacter(monster);
-                roundRecap += "You slash for " + damage + "damage and";
+                roundRecap += "You slash for " + damage + "damage and ";
             }
 
             if (monster.CharacterWillMiss(hero))

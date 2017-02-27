@@ -109,7 +109,7 @@ public class GraveLogic : CardLogic {
 		switch (option) {
 		case 0:
 			if (monster != null) {
-				return "You pick move to pick up the shovel, the body comes to life and attacks you!";
+				return "You move to pick up the shovel, the body comes to life and attacks you!";
 			} else {
 				return "A boy shows up, and thanks you for your deed. He gives you a gift";
 			}

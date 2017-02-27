@@ -147,7 +147,7 @@ public class PotionLogic : CardLogic {
 		case 5:
 			return "You feel flimsy";
 		case 6:
-			return "YYou feel as though you can fight stronger foe!";
+			return "You feel as though you can fight stronger foe!";
 		case 7:
 			return "You are refreshed";
 		default:
